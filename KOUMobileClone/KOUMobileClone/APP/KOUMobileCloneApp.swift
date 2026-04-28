@@ -10,6 +10,8 @@ import SwiftUI
 struct KOUMobileCloneApp: App {
     @State private var selectedTab = 0
     @State private var isLoginOpen = false
+    @State private var isAkademisyenLoggedIn = false
+    @State private var isLoggedIn = false
     
     var body: some Scene {
         WindowGroup {
@@ -36,11 +38,21 @@ struct KOUMobileCloneApp: App {
             }
             CustomTabBar(selectedTab: $selectedTab, isLoginOpen: $isLoginOpen)
         }
-            .sheet(isPresented: $isLoginOpen) {
-                            LoginView()
-                                .presentationDetents([.medium])
-                                .presentationDragIndicator(.visible)
-                        }
+            .sheet(isPresented: $isLoginOpen){
+                if isLoggedIn{
+                    StudentProfileView(isLoggedIn: $isLoggedIn)
+                        .presentationDetents([.large])
+                        .presentationDragIndicator(.visible)
+                }else if isAkademisyenLoggedIn {
+                    AkademisyenProfileView(isAkademisyenLoggedIn: $isAkademisyenLoggedIn)
+                        .presentationDetents([.large])
+                        .presentationDragIndicator(.visible)
+                }else{
+                    LoginView(isLoggedIn: $isLoggedIn, isAkademisyenLoggedIn: $isAkademisyenLoggedIn)
+                        .presentationDetents([.medium])
+                        .presentationDragIndicator(.visible)
+                }
+            }
         }
     }
 }

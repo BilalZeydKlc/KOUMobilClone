@@ -6,7 +6,6 @@
 //
 import SwiftUI
 
-
 struct EventItem: Identifiable{
     let id = UUID()
     let day: String

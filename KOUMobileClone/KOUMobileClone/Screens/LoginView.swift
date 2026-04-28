@@ -7,7 +7,14 @@
 import SwiftUI
 
 struct LoginView: View {
+    @Binding var isLoggedIn: Bool
+    @Binding var isAkademisyenLoggedIn: Bool
     @State private var selectedTab = 0
+    
+    @State private var studentID: String = ""
+    @State private var password: String = ""
+    @State private var showError: Bool = false
+    
     func tabButton(title: String, index: Int)-> some View{
         Button(action: { selectedTab = index }){
             VStack{
@@ -15,7 +22,7 @@ struct LoginView: View {
                     .foregroundColor(selectedTab == index ? .green : .gray)
                     .fontWeight(.medium)
                 
-                    Rectangle()
+                Rectangle()
                     .fill(selectedTab == index ? Color.green : Color.clear)
                     .frame(height: 2)
             }
@@ -41,20 +48,60 @@ struct LoginView: View {
             .overlay(Divider().offset(y: 20), alignment: .bottom)
             
             VStack(spacing: 20){
-                inputField(title: selectedTab == 0 ? "Öğrenci No" : "Sicil No", placeholder: selectedTab == 0 ?"Öğrenci Numaranızı Giriniz" : "Sicil Numaranızı Giriniz")
+                VStack(alignment: .leading, spacing: 8){
+                    Text(selectedTab == 0 ? "Öğrenci No" : "Sicil No")
+                        .font(.subheadline)
+                        .foregroundColor(.green)
+                        .fontWeight(.medium)
+                    
+                    TextField(selectedTab == 0 ? "Öğrenci Numaranızı Giriniz" : "Sicil Numaranızı Giriniz", text: $studentID)
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius:10).stroke(Color.gray.opacity(0.3)))
+                        .keyboardType(.numberPad)
+                }
                 
-                inputField(title: "Şifre", placeholder: "Şifrenizi Giriniz")
+                VStack(alignment: .leading, spacing: 8){
+                    Text("Şifre")
+                        .font(.subheadline)
+                        .foregroundColor(.green)
+                        .fontWeight(.medium)
+                    
+                    SecureField("Şifrenizi Giriniz", text: $password)
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 10).stroke(Color.gray.opacity(0.3)))
+                }
+                
+                if showError{
+                    Text("Hatalı Numara veya Şifre!")
+                        .foregroundColor(.red)
+                        .font(.caption)
+                }
             }
             .padding(.top)
             
-            Button(action: {}){
+            Button(action: {
+                if selectedTab == 0 {
+                    if studentID == "123456789" && password == "123456"{
+                        isLoggedIn = true
+                        showError = false
+                    } else {
+                        showError = true
+                    }
+                } else if selectedTab == 1 {
+                    if studentID == "12345" && password == "123"{
+                        isAkademisyenLoggedIn = true
+                        showError = false
+                    } else {
+                        showError = true
+                    }
+                }
+            }){
                 Text("Giriş Yap")
                     .foregroundColor(.white)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.green.opacity(0.7))
-                    .cornerRadius(12)
             }
             .padding(.top, 10)
             Spacer()
@@ -62,21 +109,3 @@ struct LoginView: View {
         .padding(30)
     }
 }
-
-
-func inputField(title: String, placeholder: String) -> some View{
-    VStack(alignment: .leading, spacing: 8){
-        Text(title)
-            .font(.subheadline)
-            .foregroundColor(.green)
-            .fontWeight(.medium)
-        
-        TextField(placeholder, text: .constant(""))
-            .padding()
-            .background(RoundedRectangle(cornerRadius: 10).stroke(Color.gray.opacity(0.3)))
-    }
-}
-#Preview {
-    LoginView()
-}
- 

@@ -21,7 +21,7 @@ struct HomeView: View{
                 .padding(.bottom, 100)
                 
                 .sheet(isPresented: $isShowingLogin){
-                    LoginView()
+                    LoginView(isLoggedIn: .constant(false), isAkademisyenLoggedIn: .constant(false))
                         .presentationDetents([.medium])
                         .presentationDragIndicator(.visible)
                 }
