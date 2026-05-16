@@ -12,6 +12,7 @@ struct AkademisyenProfileView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var showOgrencilerim = false
+    @State private var showMesajlar = false
     
     let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -59,7 +60,7 @@ struct AkademisyenProfileView: View {
                 AkademisyenMenuCard(title: "Öğrenci Listesi", iconName: "person.2.crop.square.stack") {
                     showOgrencilerim = true
                 }
-                AkademisyenMenuCard(title: "Mesajlar", iconName: "paperplane")
+                AkademisyenMenuCard(title: "Mesajlar", iconName: "paperplane"){ showMesajlar = true }
                 AkademisyenMenuCard(title: "Takvimim", iconName: "calendar")
                 AkademisyenMenuCard(title: "ÖBS Duyuruları", iconName: "megaphone")
             }
@@ -89,6 +90,9 @@ struct AkademisyenProfileView: View {
         }
         .fullScreenCover(isPresented: $showOgrencilerim) {
             OgrencilerimView()
+        }
+        .fullScreenCover(isPresented: $showMesajlar){
+            AkademisyenMesajlarView()
         }
     }
 }
